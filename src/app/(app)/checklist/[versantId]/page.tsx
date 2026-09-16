@@ -74,7 +74,11 @@ export default async function VersantPage({
       <div className="rounded-2xl bg-white p-4 shadow-sm">
         <h2 className="mb-3 text-sm font-semibold text-stone-900">Profil kilomètre par kilomètre</h2>
         {typedVersant.profil_km && typedVersant.profil_km.length > 0 ? (
-          <ProfilVersant profilKm={typedVersant.profil_km} />
+          <ProfilVersant
+            profilKm={typedVersant.profil_km}
+            altitudeDepart={typedVersant.altitude_depart_m}
+            distanceKm={typedVersant.distance_km}
+          />
         ) : (
           <p className="mb-4 text-sm text-stone-500">
             Profil détaillé non renseigné pour l&apos;instant.
