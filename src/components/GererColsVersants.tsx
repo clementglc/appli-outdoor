@@ -19,7 +19,7 @@ export default function GererColsVersants({ cols }: { cols: Col[] }) {
       <button
         type="button"
         onClick={() => setOuvert(true)}
-        className="text-sm font-medium text-gray-500 hover:text-gray-900"
+        className="text-sm font-medium text-orange-700 hover:text-orange-800"
       >
         + Ajouter un col ou un versant
       </button>
@@ -29,18 +29,18 @@ export default function GererColsVersants({ cols }: { cols: Col[] }) {
   return (
     <div className="space-y-6 rounded-2xl bg-white p-4 shadow-sm">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-gray-900">Gérer les cols/versants</h3>
+        <h3 className="text-sm font-semibold text-stone-900">Gérer les cols/versants</h3>
         <button
           type="button"
           onClick={() => setOuvert(false)}
-          className="text-sm text-gray-500 hover:text-gray-900"
+          className="text-sm text-stone-500 hover:text-stone-900"
         >
           Masquer
         </button>
       </div>
 
       <form action={colAction} className="space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
+        <p className="text-xs font-semibold uppercase tracking-wide text-stone-400">
           Nouveau col
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -49,19 +49,19 @@ export default function GererColsVersants({ cols }: { cols: Col[] }) {
             name="nom"
             placeholder="Nom du col"
             required
-            className="col-span-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+            className="col-span-2 rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
           />
           <input
             type="number"
             name="altitude_m"
             placeholder="Altitude (m)"
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+            className="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
           />
           <input
             type="text"
             name="departement"
             placeholder="Département"
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+            className="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
           />
         </div>
         {colState?.error && (
@@ -70,20 +70,20 @@ export default function GererColsVersants({ cols }: { cols: Col[] }) {
         <button
           type="submit"
           disabled={colPending}
-          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-60"
+          className="rounded-lg border border-orange-300 bg-orange-50 px-3 py-1.5 text-sm font-medium text-orange-800 hover:bg-orange-100 disabled:opacity-60"
         >
           {colPending ? "Ajout..." : "Ajouter le col"}
         </button>
       </form>
 
-      <form action={versantAction} className="space-y-2 border-t border-gray-100 pt-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
+      <form action={versantAction} className="space-y-2 border-t border-stone-100 pt-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-stone-400">
           Nouveau versant
         </p>
         <select
           name="col_id"
           required
-          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+          className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
         >
           <option value="">Col concerné…</option>
           {cols.map((c) => (
@@ -97,13 +97,13 @@ export default function GererColsVersants({ cols }: { cols: Col[] }) {
           name="nom"
           placeholder="Nom du versant (ex : depuis Luz-Saint-Sauveur)"
           required
-          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+          className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
         />
         <input
           type="text"
           name="ville_depart"
           placeholder="Ville de départ"
-          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+          className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
         />
         <div className="grid grid-cols-2 gap-2">
           <input
@@ -111,33 +111,33 @@ export default function GererColsVersants({ cols }: { cols: Col[] }) {
             step="0.1"
             name="distance_km"
             placeholder="Distance (km)"
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+            className="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
           />
           <input
             type="number"
             name="denivele_m"
             placeholder="Dénivelé (m D+)"
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+            className="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
           />
           <input
             type="number"
             step="0.1"
             name="pente_moyenne"
             placeholder="Pente moyenne (%)"
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+            className="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
           />
           <input
             type="number"
             step="0.1"
             name="pente_max"
             placeholder="Pente max (%)"
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+            className="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
           />
           <input
             type="number"
             name="altitude_depart_m"
             placeholder="Altitude départ (m)"
-            className="col-span-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+            className="col-span-2 rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
           />
         </div>
         {versantState?.error && (
@@ -148,7 +148,7 @@ export default function GererColsVersants({ cols }: { cols: Col[] }) {
         <button
           type="submit"
           disabled={versantPending}
-          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-60"
+          className="rounded-lg border border-orange-300 bg-orange-50 px-3 py-1.5 text-sm font-medium text-orange-800 hover:bg-orange-100 disabled:opacity-60"
         >
           {versantPending ? "Ajout..." : "Ajouter le versant"}
         </button>

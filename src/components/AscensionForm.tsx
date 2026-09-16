@@ -35,12 +35,12 @@ export default function AscensionForm({ cols }: { cols: ColAvecVersants[] }) {
     <form action={formAction} key={resetKey} className="space-y-3">
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Col</label>
+          <label className="mb-1 block text-sm font-medium text-stone-700">Col</label>
           <select
             value={colId}
             onChange={(e) => setColId(e.target.value)}
             required
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+            className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
           >
             <option value="">Sélectionner…</option>
             {colsAvecVersants.map((c) => (
@@ -51,12 +51,12 @@ export default function AscensionForm({ cols }: { cols: ColAvecVersants[] }) {
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Versant</label>
+          <label className="mb-1 block text-sm font-medium text-stone-700">Versant</label>
           <select
             name="versant_id"
             required
             disabled={!colId}
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 disabled:bg-gray-50 disabled:text-gray-400"
+            className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600 disabled:bg-stone-50 disabled:text-stone-400"
           >
             <option value="">Sélectionner…</option>
             {versantsDuCol.map((v) => (
@@ -69,37 +69,37 @@ export default function AscensionForm({ cols }: { cols: ColAvecVersants[] }) {
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">Date</label>
+        <label className="mb-1 block text-sm font-medium text-stone-700">Date</label>
         <input
           type="date"
           name="date_ascension"
           required
           max={new Date().toISOString().slice(0, 10)}
-          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+          className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
         />
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label className="mb-1 block text-sm font-medium text-stone-700">
           Commentaire (facultatif)
         </label>
         <input
           type="text"
           name="commentaire"
           placeholder="ex : sortie avec le club, canicule..."
-          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+          className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
         />
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label className="mb-1 block text-sm font-medium text-stone-700">
           Trace GPX/FIT (facultatif)
         </label>
         <input
           type="file"
           name="trace"
           accept=".gpx,.fit"
-          className="w-full text-sm text-gray-600 file:mr-3 file:rounded-lg file:border file:border-gray-300 file:bg-white file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-gray-700 hover:file:bg-gray-100"
+          className="w-full text-sm text-stone-600 file:mr-3 file:rounded-lg file:border file:border-stone-300 file:bg-white file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-stone-700 hover:file:bg-stone-100"
         />
       </div>
 
@@ -110,7 +110,7 @@ export default function AscensionForm({ cols }: { cols: ColAvecVersants[] }) {
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-gray-900 py-2 text-sm font-medium text-white transition hover:bg-gray-800 disabled:opacity-60"
+        className="w-full rounded-lg bg-orange-600 py-2 text-sm font-medium text-white transition hover:bg-orange-700 disabled:opacity-60"
       >
         {pending ? "Enregistrement..." : "Enregistrer l'ascension"}
       </button>

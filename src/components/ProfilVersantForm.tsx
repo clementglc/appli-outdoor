@@ -17,7 +17,7 @@ export default function ProfilVersantForm({
   return (
     <form action={formAction} className="space-y-2">
       <input type="hidden" name="versant_id" value={versantId} />
-      <label className="block text-sm font-medium text-gray-700">
+      <label className="block text-sm font-medium text-stone-700">
         Profil km par km (pentes en %, séparées par des virgules, un chiffre par km depuis le
         pied jusqu&apos;au sommet)
       </label>
@@ -26,7 +26,7 @@ export default function ProfilVersantForm({
         rows={3}
         defaultValue={profilActuel?.join(", ") ?? ""}
         placeholder="ex : 6.5, 7.2, 8.9, 6.1, 9.4, ..."
-        className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+        className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
       />
       {state?.error && (
         <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{state.error}</p>
@@ -34,7 +34,7 @@ export default function ProfilVersantForm({
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-60"
+        className="rounded-lg border border-orange-300 bg-orange-50 px-3 py-1.5 text-sm font-medium text-orange-800 hover:bg-orange-100 disabled:opacity-60"
       >
         {pending ? "Enregistrement..." : profilActuel ? "Mettre à jour le profil" : "Enregistrer le profil"}
       </button>

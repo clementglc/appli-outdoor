@@ -42,7 +42,7 @@ export default async function AscensionsPage() {
       <h1 className="sr-only">Mes ascensions</h1>
 
       <div className="rounded-2xl bg-white p-4 shadow-sm">
-        <h2 className="mb-3 text-sm font-semibold text-gray-900">
+        <h2 className="mb-3 text-sm font-semibold text-stone-900">
           Enregistrer une ascension
         </h2>
         <AscensionForm cols={cols} />
@@ -52,7 +52,7 @@ export default async function AscensionsPage() {
 
       <div className="space-y-3">
         {ascensionsAvecUrl.length === 0 && (
-          <p className="rounded-2xl bg-white p-5 text-sm text-gray-500 shadow-sm">
+          <p className="rounded-2xl bg-white p-5 text-sm text-stone-500 shadow-sm">
             Aucune ascension enregistrée pour le moment.
           </p>
         )}
@@ -64,11 +64,11 @@ export default async function AscensionsPage() {
               className="flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-white p-4 shadow-sm"
             >
               <div>
-                <p className="font-medium text-gray-900">
+                <p className="font-medium text-stone-900">
                   {versant?.colNom ?? "Col supprimé"}
                   {versant?.nom ? ` — ${versant.nom}` : ""}
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-stone-500">
                   {formatDateLongue(ascension.date_ascension)}
                   {ascension.commentaire ? ` · ${ascension.commentaire}` : ""}
                 </p>
@@ -79,7 +79,7 @@ export default async function AscensionsPage() {
                     href={traceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm font-medium text-gray-500 hover:text-gray-900"
+                    className="text-sm font-medium text-orange-700 hover:text-orange-800"
                   >
                     {ascension.trace_nom_original ?? "Trace"}
                   </a>

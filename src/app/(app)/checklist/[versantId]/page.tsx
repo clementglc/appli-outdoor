@@ -45,14 +45,14 @@ export default async function VersantPage({
   return (
     <div className="space-y-6">
       <div>
-        <Link href="/checklist" className="text-sm font-medium text-gray-500 hover:text-gray-900">
+        <Link href="/checklist" className="text-sm font-medium text-stone-500 hover:text-orange-700">
           ← Retour à la checklist
         </Link>
       </div>
 
       <div>
-        <h1 className="text-xl font-semibold text-gray-900">{typedCol?.nom ?? "Col"}</h1>
-        <p className="text-gray-500">{typedVersant.nom}</p>
+        <h1 className="text-xl font-semibold text-stone-900">{typedCol?.nom ?? "Col"}</h1>
+        <p className="text-orange-700">{typedVersant.nom}</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -72,23 +72,23 @@ export default async function VersantPage({
       </div>
 
       <div className="rounded-2xl bg-white p-4 shadow-sm">
-        <h2 className="mb-3 text-sm font-semibold text-gray-900">Profil kilomètre par kilomètre</h2>
+        <h2 className="mb-3 text-sm font-semibold text-stone-900">Profil kilomètre par kilomètre</h2>
         {typedVersant.profil_km && typedVersant.profil_km.length > 0 ? (
           <ProfilVersant profilKm={typedVersant.profil_km} />
         ) : (
-          <p className="mb-4 text-sm text-gray-500">
+          <p className="mb-4 text-sm text-stone-500">
             Profil détaillé non renseigné pour l&apos;instant.
           </p>
         )}
-        <div className="mt-4 border-t border-gray-100 pt-4">
+        <div className="mt-4 border-t border-stone-100 pt-4">
           <ProfilVersantForm versantId={typedVersant.id} profilActuel={typedVersant.profil_km} />
         </div>
       </div>
 
       {typedAscensions.length > 0 && (
         <div className="rounded-2xl bg-white p-4 shadow-sm">
-          <h2 className="mb-3 text-sm font-semibold text-gray-900">Tes ascensions de ce versant</h2>
-          <ul className="space-y-1.5 text-sm text-gray-700">
+          <h2 className="mb-3 text-sm font-semibold text-stone-900">Tes ascensions de ce versant</h2>
+          <ul className="space-y-1.5 text-sm text-stone-700">
             {typedAscensions.map((a) => (
               <li key={a.id}>
                 {formatDateLongue(a.date_ascension)}
@@ -105,8 +105,8 @@ export default async function VersantPage({
 function StatCarte({ label, valeur }: { label: string; valeur: string }) {
   return (
     <div className="rounded-2xl bg-white p-3 shadow-sm">
-      <p className="text-xs text-gray-400">{label}</p>
-      <p className="text-sm font-medium text-gray-900">{valeur}</p>
+      <p className="text-xs text-stone-400">{label}</p>
+      <p className="text-sm font-medium text-stone-900">{valeur}</p>
     </div>
   );
 }

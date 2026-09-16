@@ -23,8 +23,8 @@ export default function NavPrincipale() {
             href={lien.href}
             className={`whitespace-nowrap rounded-full px-2.5 py-1 ${
               actif
-                ? "bg-gray-900 text-white"
-                : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+                ? "bg-orange-600 text-white"
+                : "text-stone-500 hover:bg-stone-100 hover:text-stone-900"
             }`}
           >
             {lien.label}

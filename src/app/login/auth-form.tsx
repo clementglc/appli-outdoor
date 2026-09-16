@@ -23,16 +23,16 @@ export default function AuthForm() {
   if (mode === "forgot") {
     return (
       <div>
-        <h2 className="mb-1 text-center text-lg font-semibold text-gray-900">
+        <h2 className="mb-1 text-center text-lg font-semibold text-stone-900">
           Mot de passe oublié
         </h2>
-        <p className="mb-6 text-center text-sm text-gray-500">
+        <p className="mb-6 text-center text-sm text-stone-500">
           Renseigne ton email, on t&apos;envoie un lien de réinitialisation.
         </p>
 
         <form action={forgotAction} className="space-y-4">
           <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="mb-1 block text-sm font-medium text-stone-700">
               Email
             </label>
             <input
@@ -41,7 +41,7 @@ export default function AuthForm() {
               type="email"
               autoComplete="email"
               required
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+              className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
             />
           </div>
 
@@ -54,7 +54,7 @@ export default function AuthForm() {
           <button
             type="submit"
             disabled={forgotPending}
-            className="w-full rounded-lg bg-gray-900 py-2 text-sm font-medium text-white transition hover:bg-gray-800 disabled:opacity-60"
+            className="w-full rounded-lg bg-orange-600 py-2 text-sm font-medium text-white transition hover:bg-orange-700 disabled:opacity-60"
           >
             {forgotPending ? "Veuillez patienter..." : "Envoyer le lien de réinitialisation"}
           </button>
@@ -62,7 +62,7 @@ export default function AuthForm() {
           <button
             type="button"
             onClick={() => setMode("login")}
-            className="w-full text-center text-sm font-medium text-gray-500 hover:text-gray-900"
+            className="w-full text-center text-sm font-medium text-stone-500 hover:text-orange-700"
           >
             ← Retour à la connexion
           </button>
@@ -77,12 +77,12 @@ export default function AuthForm() {
 
   return (
     <div>
-      <div className="mb-6 flex rounded-lg bg-gray-100 p-1 text-sm font-medium">
+      <div className="mb-6 flex rounded-lg bg-stone-100 p-1 text-sm font-medium">
         <button
           type="button"
           onClick={() => setMode("login")}
           className={`flex-1 rounded-md py-1.5 transition ${
-            isLogin ? "bg-white text-gray-900 shadow-sm" : "text-gray-500"
+            isLogin ? "bg-white text-orange-700 shadow-sm" : "text-stone-500"
           }`}
         >
           Connexion
@@ -91,7 +91,7 @@ export default function AuthForm() {
           type="button"
           onClick={() => setMode("signup")}
           className={`flex-1 rounded-md py-1.5 transition ${
-            !isLogin ? "bg-white text-gray-900 shadow-sm" : "text-gray-500"
+            !isLogin ? "bg-white text-orange-700 shadow-sm" : "text-stone-500"
           }`}
         >
           Inscription
@@ -100,7 +100,7 @@ export default function AuthForm() {
 
       <form action={isLogin ? loginAction : signupAction} className="space-y-4">
         <div>
-          <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
+          <label htmlFor="email" className="mb-1 block text-sm font-medium text-stone-700">
             Email
           </label>
           <input
@@ -109,20 +109,20 @@ export default function AuthForm() {
             type="email"
             autoComplete="email"
             required
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+            className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
           />
         </div>
 
         <div>
           <div className="mb-1 flex items-center justify-between">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="block text-sm font-medium text-stone-700">
               Mot de passe
             </label>
             {isLogin && (
               <button
                 type="button"
                 onClick={() => setMode("forgot")}
-                className="text-xs font-medium text-gray-500 hover:text-gray-900"
+                className="text-xs font-medium text-stone-500 hover:text-orange-700"
               >
                 Mot de passe oublié ?
               </button>
@@ -135,7 +135,7 @@ export default function AuthForm() {
             autoComplete={isLogin ? "current-password" : "new-password"}
             required
             minLength={6}
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+            className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
           />
         </div>
 
@@ -143,7 +143,7 @@ export default function AuthForm() {
           <div>
             <label
               htmlFor="confirmation"
-              className="mb-1 block text-sm font-medium text-gray-700"
+              className="mb-1 block text-sm font-medium text-stone-700"
             >
               Confirmer le mot de passe
             </label>
@@ -154,7 +154,7 @@ export default function AuthForm() {
               autoComplete="new-password"
               required
               minLength={6}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+              className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
             />
           </div>
         )}
@@ -168,7 +168,7 @@ export default function AuthForm() {
         <button
           type="submit"
           disabled={pending}
-          className="w-full rounded-lg bg-gray-900 py-2 text-sm font-medium text-white transition hover:bg-gray-800 disabled:opacity-60"
+          className="w-full rounded-lg bg-orange-600 py-2 text-sm font-medium text-white transition hover:bg-orange-700 disabled:opacity-60"
         >
           {pending
             ? "Veuillez patienter..."

@@ -38,12 +38,12 @@ export default async function ChecklistPage() {
 
       <div className="rounded-2xl bg-white p-5 shadow-sm">
         <div className="mb-2 flex items-baseline justify-between">
-          <span className="text-2xl font-semibold text-gray-900">
+          <span className="text-2xl font-semibold text-stone-900">
             {stats.colsGravis} / {stats.colsTotal}
           </span>
-          <span className="text-sm text-gray-500">cols gravis</span>
+          <span className="text-sm text-stone-500">cols gravis</span>
         </div>
-        <div className="h-2 overflow-hidden rounded-full bg-gray-100">
+        <div className="h-2 overflow-hidden rounded-full bg-stone-100">
           <div
             className="h-full rounded-full bg-emerald-500 transition-all"
             style={{
@@ -51,13 +51,13 @@ export default async function ChecklistPage() {
             }}
           />
         </div>
-        <p className="mt-2 text-xs text-gray-400">
+        <p className="mt-2 text-xs text-stone-400">
           {stats.versantsGravis} / {stats.versantsTotal} versants gravis
         </p>
       </div>
 
       {cols.length === 0 && (
-        <p className="rounded-2xl bg-white p-5 text-sm text-gray-500 shadow-sm">
+        <p className="rounded-2xl bg-white p-5 text-sm text-stone-500 shadow-sm">
           Aucun col enregistré pour le moment. Ajoute-en depuis l&apos;onglet
           « Mes ascensions ».
         </p>
@@ -65,7 +65,7 @@ export default async function ChecklistPage() {
 
       {Array.from(groupes.entries()).map(([departement, colsDuGroupe]) => (
         <div key={departement}>
-          <h2 className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-gray-400">
+          <h2 className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-orange-700">
             {departement}
           </h2>
           <div className="space-y-3">
@@ -82,20 +82,20 @@ export default async function ChecklistPage() {
                       className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs ${
                         col.gravi
                           ? "bg-emerald-500 text-white"
-                          : "border border-gray-300 text-transparent"
+                          : "border border-stone-300 text-transparent"
                       }`}
                     >
                       ✓
                     </span>
-                    <span className="font-medium text-gray-900">{col.nom}</span>
+                    <span className="font-medium text-stone-900">{col.nom}</span>
                   </div>
                   {col.altitude_m != null && (
-                    <span className="text-sm text-gray-400">{col.altitude_m} m</span>
+                    <span className="text-sm text-stone-400">{col.altitude_m} m</span>
                   )}
                 </div>
 
                 {col.versantsStatut.length > 0 && (
-                  <ul className="mt-3 space-y-1.5 border-t border-gray-100 pt-3">
+                  <ul className="mt-3 space-y-1.5 border-t border-stone-100 pt-3">
                     {col.versants.map((versant) => {
                       const statut = col.versantsStatut.find(
                         (v) => v.versantId === versant.id
@@ -104,19 +104,19 @@ export default async function ChecklistPage() {
                         <li key={versant.id}>
                           <Link
                             href={`/checklist/${versant.id}`}
-                            className="flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 rounded-lg py-1 text-sm hover:bg-gray-50"
+                            className="flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 rounded-lg py-1 text-sm hover:bg-orange-50"
                           >
                             <span className="flex items-center gap-1.5">
                               <span
                                 className={`inline-block h-1.5 w-1.5 rounded-full ${
-                                  statut?.gravi ? "bg-emerald-500" : "bg-gray-300"
+                                  statut?.gravi ? "bg-emerald-500" : "bg-stone-300"
                                 }`}
                               />
-                              <span className={statut?.gravi ? "text-gray-900" : "text-gray-500"}>
+                              <span className={statut?.gravi ? "text-stone-900" : "text-stone-500"}>
                                 {versant.nom}
                               </span>
                             </span>
-                            <span className="text-xs text-gray-400">
+                            <span className="text-xs text-stone-400">
                               {formatDistance(versant.distance_km)} ·{" "}
                               {formatDenivele(versant.denivele_m)} ·{" "}
                               {formatPente(versant.pente_moyenne)}
