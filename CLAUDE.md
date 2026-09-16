@@ -60,7 +60,7 @@ Suite à la découverte d'une inversion Est/Ouest sur Marie-Blanque (stats saisi
 
 ## Pièges connus
 
-- **Toucher `middleware.ts` ou créer/supprimer des routes plusieurs fois pendant qu'un `npm run dev` tourne en continu peut désynchroniser le cache Turbopack**, provoquant des erreurs client type "Failed to fetch" sans rapport avec le code réel (rencontré le 2026-09-16 après plusieurs allers-retours sur une route `/test-chart` temporaire). Si ça arrive et que le code source est propre (pas d'import cassé), redémarrer le serveur de dev (Ctrl+C puis `npm.cmd run dev -- -p 3010`) résout le problème — même famille de piège que "ne jamais lancer `npm run build` pendant `npm run dev`" sur Finance WebApp.
+- **"Failed to fetch" en soumettant le formulaire d'ascension avec une trace GPX** (rencontré le 2026-09-16) : fausse piste initiale (cache Turbopack désynchronisé après plusieurs allers-retours sur une route de test) — la vraie cause était la limite par défaut de 1 Mo sur le corps d'une Server Action Next.js, trop petite pour une vraie trace GPS. Corrigé dans `next.config.ts` (`experimental.serverActions.bodySizeLimit: "15mb"`). ⚠️ Un changement de `next.config.ts` n'est jamais pris en compte à chaud — il faut redémarrer le serveur de dev (Ctrl+C puis `npm.cmd run dev -- -p 3010`) après toute modification de ce fichier.
 
 ## Fichiers clés
 
