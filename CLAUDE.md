@@ -17,6 +17,7 @@ Application personnelle pour Clément (compte : clem.gallice@gmail.com) : recens
 - **Saisie manuelle en priorité, Strava reporté** : l'utilisateur a explicitement préféré saisir ses ascensions à la main (valeur de se remémorer la sortie) plutôt que tout automatiser. Une intégration Strava (OAuth self-service via strava.com/settings/api, aucune validation requise pour un usage personnel) reste possible plus tard si l'envie vient — non bloquant, à reprendre si demandé.
 - **Liste de cols de référence construite manuellement**, enrichie au fil de l'eau plutôt que scrapée — voir `scripts/seed-cols.mjs`.
 - Un col est considéré **"gravi" dès qu'au moins un de ses versants l'a été** (convention usuelle) — le détail par versant reste affiché pour qui vise aussi tous les versants. Logique dans `src/lib/cols.ts` (`colsAvecStatut`).
+- **Inspiration Been (app de pays visités), 2026-09-16** : sur demande explicite, priorité donnée à la refonte visuelle "collection" (grille de cartes colorées quand gravi / grisées sinon, anneau de progression façon %, filtre par département) plutôt qu'à une carte interactive des Pyrénées — celle-ci nécessiterait des coordonnées GPS par col (absentes du schéma actuel) et une librairie de carte (Leaflet envisagé, gratuit, pas de clé API) ; reportée, à reprendre si demandé.
 
 ## Schéma Supabase (à créer via `supabase/schema.sql` puis `supabase/storage.sql`, dans le SQL Editor du projet Supabase)
 
@@ -29,9 +30,9 @@ Application personnelle pour Clément (compte : clem.gallice@gmail.com) : recens
 
 **Auth** (`/login`) : inscription/connexion email+mdp + "Mot de passe oublié ?" — copié tel quel du pattern Finance WebApp (`forgotPassword`/`updatePassword`, page `/reset-password`, route `/auth/confirm`). **Pas encore de SMTP personnalisé configuré** — utilise l'envoi email par défaut de Supabase (limité en volume mais suffisant pour un usage perso/test ; à passer sur Gmail SMTP comme Finance WebApp si le volume ou la personnalisation des templates devient un problème).
 
-**Checklist** (`/checklist`) : vue principale, lecture seule. Barre de progression "X / Y cols gravis" + "X / Y versants gravis" en tête. Cols groupés par département, triés (non gravis d'abord), chaque col affichant la liste de ses versants avec puce verte/grise + stats (distance, dénivelé, pente) + date de la dernière ascension si gravi. Chaque versant est cliquable → page détail.
+**Checklist** (`/checklist`) : vue principale, lecture seule, style "collection" (inspiré de Been). En tête, anneau de progression SVG (`ProgressionRing.tsx`) avec le % de cols gravis + "X/Y cols" + "X/Y versants". En dessous, `ChecklistGrille.tsx` (client) : chips de filtre par département (+ "Tous"), puis grille responsive de `ColCard.tsx` — icône montagne et texte en couleur (orange) pour un col gravi, grisés sinon, badge ✓ vert si gravi ; chaque carte liste ses versants (puce verte/grise, stats distance/dénivelé/pente, date de dernière ascension) avec lien vers la page détail. Cols non gravis triés en premier au sein de chaque filtre.
 
-**Détail d'un versant** (`/checklist/[versantId]`) : stats complètes (distance, D+, pente moyenne/max, altitude départ/sommet), profil kilomètre par kilomètre (`ProfilVersant.tsx`, graphique en barres SVG maison coloré par tranche de pente — vert/jaune/orange/rouge), formulaire pour renseigner/corriger ce profil (`ProfilVersantForm.tsx` + action `modifierProfilVersant`, pentes séparées par virgules), historique des ascensions personnelles de ce versant.
+**Détail d'un versant** (`/checklist/[versantId]`) : stats complètes (distance, D+, pente moyenne/max, altitude départ/sommet), profil altimétrique en escalier (`ProfilVersant.tsx`, SVG maison — hauteur des marches = altitude cumulée réelle, couleur = sévérité de la pente, altitude au-dessus de chaque marche, % à l'intérieur, légende des tranches), formulaire pour renseigner/corriger ce profil (`ProfilVersantForm.tsx` + action `modifierProfilVersant`, pentes séparées par virgules), historique des ascensions personnelles de ce versant.
 
 **Mes ascensions** (`/ascensions`) : vue d'écriture.
 - Formulaire "Enregistrer une ascension" (`AscensionForm.tsx`) : sélection Col → Versant (liste dépendante, cascading select côté client), date, commentaire facultatif, upload facultatif d'une trace GPX/FIT (stockée dans le bucket `traces`, jamais public — URL signée générée à la demande, expire après 1h).
@@ -62,7 +63,7 @@ Suite à la découverte d'une inversion Est/Ouest sur Marie-Blanque (stats saisi
 - `src/lib/cols.ts` : logique de statut (col/versant gravi ou non) + calcul de progression
 - `src/lib/types.ts`, `src/lib/format.ts`, `src/lib/constants.ts`
 - `src/app/(app)/checklist/{page.tsx,[versantId]/{page.tsx,actions.ts}}`, `src/app/(app)/ascensions/{page.tsx,actions.ts}`
-- `src/components/AscensionForm.tsx`, `GererColsVersants.tsx`, `ProfilVersantForm.tsx`, `BoutonConfirmation.tsx`, `NavPrincipale.tsx`, `charts/ProfilVersant.tsx`
+- `src/components/AscensionForm.tsx`, `GererColsVersants.tsx`, `ProfilVersantForm.tsx`, `BoutonConfirmation.tsx`, `NavPrincipale.tsx`, `ProgressionRing.tsx`, `ChecklistGrille.tsx`, `ColCard.tsx`, `charts/ProfilVersant.tsx`
 - `supabase/schema.sql` : tables + RLS — **à exécuter une fois dans Supabase → SQL Editor**
 - `supabase/storage.sql` : bucket `traces` + policies — **à exécuter une fois, après schema.sql**
 - `supabase/profil-km.sql` : colonne `versants.profil_km` — **à exécuter une fois**
