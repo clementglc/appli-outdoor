@@ -93,13 +93,13 @@ export default function AscensionForm({ cols }: { cols: ColAvecVersants[] }) {
 
       <div>
         <label className="mb-1 block text-sm font-medium text-stone-700">
-          Trace GPX/FIT (facultatif)
+          Lien vers l&apos;activité (Strava, Garmin Connect... — facultatif)
         </label>
         <input
-          type="file"
-          name="trace"
-          accept=".gpx,.fit"
-          className="w-full text-sm text-stone-600 file:mr-3 file:rounded-lg file:border file:border-stone-300 file:bg-white file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-stone-700 hover:file:bg-stone-100"
+          type="url"
+          name="lien_activite"
+          placeholder="https://www.strava.com/activities/..."
+          className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
         />
       </div>
 

@@ -30,7 +30,6 @@ export type Ascension = {
   versant_id: string;
   date_ascension: string;
   commentaire: string | null;
-  trace_path: string | null;
-  trace_nom_original: string | null;
+  lien_activite: string | null;
   created_at: string;
 };

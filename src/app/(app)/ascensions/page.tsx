@@ -27,16 +27,6 @@ export default async function AscensionsPage() {
     cols.flatMap((c) => c.versants.map((v) => [v.id, { ...v, colNom: c.nom }]))
   );
 
-  const ascensionsAvecUrl = await Promise.all(
-    ascensions.map(async (ascension) => {
-      if (!ascension.trace_path) return { ascension, traceUrl: null };
-      const { data } = await supabase.storage
-        .from("traces")
-        .createSignedUrl(ascension.trace_path, 3600);
-      return { ascension, traceUrl: data?.signedUrl ?? null };
-    })
-  );
-
   return (
     <div className="space-y-6">
       <h1 className="sr-only">Mes ascensions</h1>
@@ -51,12 +41,12 @@ export default async function AscensionsPage() {
       <GererColsVersants cols={cols} />
 
       <div className="space-y-3">
-        {ascensionsAvecUrl.length === 0 && (
+        {ascensions.length === 0 && (
           <p className="rounded-2xl bg-white p-5 text-sm text-stone-500 shadow-sm">
             Aucune ascension enregistrée pour le moment.
           </p>
         )}
-        {ascensionsAvecUrl.map(({ ascension, traceUrl }) => {
+        {ascensions.map((ascension) => {
           const versant = versantParId.get(ascension.versant_id);
           return (
             <div
@@ -74,19 +64,18 @@ export default async function AscensionsPage() {
                 </p>
               </div>
               <div className="flex items-center gap-3">
-                {traceUrl && (
+                {ascension.lien_activite && (
                   <a
-                    href={traceUrl}
+                    href={ascension.lien_activite}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm font-medium text-orange-700 hover:text-orange-800"
                   >
-                    {ascension.trace_nom_original ?? "Trace"}
+                    Voir l&apos;activité ↗
                   </a>
                 )}
                 <form action={supprimerAscension}>
                   <input type="hidden" name="id" value={ascension.id} />
-                  <input type="hidden" name="trace_path" value={ascension.trace_path ?? ""} />
                   <BoutonConfirmation
                     message="Supprimer cette ascension ?"
                     className="text-sm text-red-600 hover:text-red-700"

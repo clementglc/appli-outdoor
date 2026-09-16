@@ -1,6 +1,5 @@
 "use server";
 
-import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -90,10 +89,14 @@ export async function ajouterAscension(
   const versantId = String(formData.get("versant_id") ?? "");
   const date = String(formData.get("date_ascension") ?? "");
   const commentaire = String(formData.get("commentaire") ?? "").trim();
-  const trace = formData.get("trace");
+  const lienActivite = String(formData.get("lien_activite") ?? "").trim();
 
   if (!versantId || !date) {
     return { error: "Le versant et la date sont obligatoires." };
+  }
+
+  if (lienActivite && !/^https?:\/\//i.test(lienActivite)) {
+    return { error: "Le lien de l'activité doit commencer par http:// ou https://." };
   }
 
   const supabase = await createClient();
@@ -102,31 +105,12 @@ export async function ajouterAscension(
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  let tracePath: string | null = null;
-  let traceNomOriginal: string | null = null;
-
-  if (trace instanceof File && trace.size > 0) {
-    const extension = trace.name.includes(".") ? trace.name.split(".").pop() : "";
-    const chemin = `${user.id}/${randomUUID()}${extension ? `.${extension}` : ""}`;
-    const { error: erreurUpload } = await supabase.storage
-      .from("traces")
-      .upload(chemin, trace, { contentType: trace.type || undefined });
-
-    if (erreurUpload) {
-      return { error: `Échec de l'envoi de la trace : ${erreurUpload.message}` };
-    }
-
-    tracePath = chemin;
-    traceNomOriginal = trace.name;
-  }
-
   const { error } = await supabase.from("ascensions").insert({
     user_id: user.id,
     versant_id: versantId,
     date_ascension: date,
     commentaire: commentaire || null,
-    trace_path: tracePath,
-    trace_nom_original: traceNomOriginal,
+    lien_activite: lienActivite || null,
   });
 
   if (error) {
@@ -140,17 +124,12 @@ export async function ajouterAscension(
 
 export async function supprimerAscension(formData: FormData) {
   const id = String(formData.get("id") ?? "");
-  const tracePath = String(formData.get("trace_path") ?? "");
 
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
-
-  if (tracePath) {
-    await supabase.storage.from("traces").remove([tracePath]);
-  }
 
   await supabase.from("ascensions").delete().eq("id", id);
 

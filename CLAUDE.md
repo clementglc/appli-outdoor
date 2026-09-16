@@ -15,6 +15,7 @@ Application personnelle pour Clément (compte : clem.gallice@gmail.com) : recens
 
 - **Pas d'intégration Garmin** : leur "Connect Developer Program" nécessite une validation manuelle par Garmin, orientée partenaires commerciaux — pas adapté à un projet perso. Abandonné d'emblée.
 - **Saisie manuelle en priorité, Strava reporté** : l'utilisateur a explicitement préféré saisir ses ascensions à la main (valeur de se remémorer la sortie) plutôt que tout automatiser. Une intégration Strava (OAuth self-service via strava.com/settings/api, aucune validation requise pour un usage personnel) reste possible plus tard si l'envie vient — non bloquant, à reprendre si demandé.
+- **Upload de trace GPX/FIT abandonné au profit d'un simple lien d'activité (2026-09-16)** : le fichier une fois uploadé n'était pas visualisable dans l'app (pas de viewer GPX maison) — inutile en l'état. Remplacé par un champ texte `lien_activite` (URL vers Strava, Garmin Connect...) : moins de friction, et le viewer de la plateforme d'origine (carte, profil d'élévation) fait bien mieux qu'un visualiseur maison. Voir `supabase/lien-activite.sql` (ajoute `lien_activite`, supprime `trace_path`/`trace_nom_original`) — le bucket Storage `traces` n'est plus utilisé (laissé en place, supprimable manuellement).
 - **Liste de cols de référence construite manuellement**, enrichie au fil de l'eau plutôt que scrapée — voir `scripts/seed-cols.mjs`.
 - Un col est considéré **"gravi" dès qu'au moins un de ses versants l'a été** (convention usuelle) — le détail par versant reste affiché pour qui vise aussi tous les versants. Logique dans `src/lib/cols.ts` (`colsAvecStatut`).
 - **Inspiration Been (app de pays visités), 2026-09-16** : sur demande explicite, priorité donnée à la refonte visuelle "collection" (grille de cartes colorées quand gravi / grisées sinon, anneau de progression façon %, filtre par département) plutôt qu'à une carte interactive des Pyrénées — celle-ci nécessiterait des coordonnées GPS par col (absentes du schéma actuel) et une librairie de carte (Leaflet envisagé, gratuit, pas de clé API) ; reportée, à reprendre si demandé.
@@ -23,8 +24,8 @@ Application personnelle pour Clément (compte : clem.gallice@gmail.com) : recens
 
 - `cols` : id, nom, altitude_m (nullable), departement (texte libre, nullable), created_at — **données de référence partagées**, pas de user_id (RLS : lecture/écriture pour tout utilisateur authentifié, pas de notion d'admin séparée tant que l'app reste mono-utilisateur)
 - `versants` : id, col_id, nom, ville_depart, altitude_depart_m, distance_km, denivele_m, pente_moyenne (%), pente_max (%), profil_km (jsonb nullable, tableau de pentes moyennes par km — voir `supabase/profil-km.sql`), created_at — même politique RLS que `cols`
-- `ascensions` : id, user_id, versant_id, date_ascension, commentaire (nullable), trace_path (nullable, chemin dans le bucket Storage "traces"), trace_nom_original (nullable), created_at — **RLS stricte par user_id** (données personnelles)
-- Bucket Storage `traces` (privé) : traces GPX/FIT jointes à une ascension, chemin `<user_id>/<uuid>.<ext>` — policies RLS sur `storage.objects` scopées par premier segment de chemin = `auth.uid()`
+- `ascensions` : id, user_id, versant_id, date_ascension, commentaire (nullable), lien_activite (nullable, URL vers Strava/Garmin Connect/etc.), created_at — **RLS stricte par user_id** (données personnelles)
+- Bucket Storage `traces` (privé, créé par `supabase/storage.sql`) : **plus utilisé depuis le 2026-09-16** (upload de trace GPX remplacé par un lien d'activité, voir "Décisions" ci-dessus) — laissé en place, supprimable manuellement depuis Supabase → Storage si besoin.
 
 ## Fonctionnalités livrées
 
@@ -35,9 +36,9 @@ Application personnelle pour Clément (compte : clem.gallice@gmail.com) : recens
 **Détail d'un versant** (`/checklist/[versantId]`) : stats complètes (distance, D+, pente moyenne/max, altitude départ/sommet), profil altimétrique en silhouette continue (`ProfilVersant.tsx`, SVG maison — un trapèze par km dont le sommet va de l'altitude cumulée précédente à la suivante, pour un enchaînement sans cassure entre les km ; couleur = sévérité de la pente, altitude au-dessus de chaque point, % à l'intérieur, légende des tranches), historique des ascensions personnelles de ce versant. **Pas de modification du profil depuis l'app** (retiré le 2026-09-16 sur demande explicite) — `cols`/`versants` sont des données de référence partagées entre tous les comptes, pas question qu'un utilisateur quelconque les modifie à sa guise depuis l'UI ; toute correction passe par un script ponctuel ou le SQL Editor (cf. section Audit ci-dessus), jamais par une action serveur exposée dans l'app.
 
 **Mes ascensions** (`/ascensions`) : vue d'écriture.
-- Formulaire "Enregistrer une ascension" (`AscensionForm.tsx`) : sélection Col → Versant (liste dépendante, cascading select côté client), date, commentaire facultatif, upload facultatif d'une trace GPX/FIT (stockée dans le bucket `traces`, jamais public — URL signée générée à la demande, expire après 1h).
+- Formulaire "Enregistrer une ascension" (`AscensionForm.tsx`) : sélection Col → Versant (liste dépendante, cascading select côté client), date, commentaire facultatif, lien facultatif vers l'activité (Strava, Garmin Connect...) — validé côté serveur (doit commencer par `http://`/`https://`).
 - "+ Ajouter un col ou un versant" (`GererColsVersants.tsx`, repliable) : deux petits formulaires pour enrichir la liste de référence au fil de l'eau.
-- Liste des ascensions déjà enregistrées (col, versant, date, commentaire, lien de téléchargement de la trace si présente) avec suppression (confirmation, supprime aussi le fichier du Storage).
+- Liste des ascensions déjà enregistrées (col, versant, date, commentaire, lien "Voir l'activité ↗" si présent) avec suppression (confirmation).
 
 ## Scripts ponctuels (dossier `scripts/`, Node ESM, lisent `.env.local` via `--env-file`, demandent email+mdp dans le terminal — jamais stockés)
 
@@ -71,3 +72,4 @@ Suite à la découverte d'une inversion Est/Ouest sur Marie-Blanque (stats saisi
 - `supabase/schema.sql` : tables + RLS — **à exécuter une fois dans Supabase → SQL Editor**
 - `supabase/storage.sql` : bucket `traces` + policies — **à exécuter une fois, après schema.sql**
 - `supabase/profil-km.sql` : colonne `versants.profil_km` — **à exécuter une fois**
+- `supabase/lien-activite.sql` : `ascensions.lien_activite` (remplace `trace_path`/`trace_nom_original`) — **à exécuter une fois**
