@@ -1,11 +1,15 @@
 // Script ponctuel : renseigne le profil kilomètre par kilomètre (pente moyenne de
-// chaque km, du pied au sommet) des versants déjà en base, à partir de données
-// lues sur cyclingcols.com (graphiques d'altitude par tranche de ~500 m, seule
-// source utilisée — voir le rapport livré avec ce script pour le détail
-// versant par versant : URL source, nombre de valeurs, fiabilité de la
-// correspondance). N'écrit que les versants pour lesquels une correspondance
-// fiable a été trouvée ; les autres sont volontairement absents de PROFILS
-// (aucune écriture pour eux, cf. "introuvables" dans le rapport).
+// chaque km, du pied au sommet) des versants déjà en base. 18 versants depuis
+// cyclingcols.com (première recherche), 2 versants supplémentaires depuis
+// cols-cyclisme.com (Port de Lers et Col de Jau — les 7 autres restent
+// introuvables/trop divergents sur les deux sources). N'écrit que les versants
+// pour lesquels une correspondance jugée fiable a été trouvée ; commentaire par
+// entrée = source exacte, méthode d'extraction et écarts constatés.
+//
+// ⚠️ Col de Jau : aucune stat de référence n'existait pour vérifier la
+// correspondance (col sans données connues à l'avance) — profil à valider
+// visuellement une fois affiché dans l'app, confiance plus faible que les
+// autres entrées.
 //
 // Usage (Node 20+, lit les clés dans .env.local) :
 //   node --env-file=.env.local scripts/appliquer-profils-km.mjs
@@ -140,6 +144,34 @@ const PROFILS = [
     versantNom: "Versant Est (Aulus-les-Bains)",
     profilKm: [3.0, 9.2, 9.7, 8.2, 7.7, 7.8, 12.3, 8.3, 8.7, 7.0],
   },
+  {
+    // Source : cols-cyclisme.com/pyrenees-centrales/france/port-de-lers-depuis-vicdessos-c540.htm
+    // Stats site 11.50 km / 807 m D+ / 7.02% vs référence 11.6 km / 838 m / 7.2%
+    // (écarts <4%) — quasi certainement le bon versant. Extrait
+    // programmatiquement du SVG du site (segments chiffrés, pas une lecture
+    // visuelle) — plus fiable que la tentative précédente via cyclingcols.com
+    // (sous-segment deviné, abandonnée).
+    colNom: "Port de Lers",
+    versantNom: "Versant Est (Vicdessos)",
+    profilKm: [6.0, 10.2, 7.0, 3.9, 6.0, 7.0, 6.5, 7.8, 8.9, 7.8, 7.0, 5.1],
+  },
+  {
+    // Source : cols-cyclisme.com/pyrenees-est/france/col-de-jau-depuis-mosset-c239.htm
+    // Seule page correspondant à ce versant, mais AUCUNE stat de référence
+    // n'existait pour vérifier la correspondance (col sans données connues à
+    // l'avance) et le graphique du site est une image (lecture visuelle +
+    // interpolation, pas un tableau chiffré) — confiance plus faible que les
+    // autres entrées de ce fichier, à valider une fois affiché dans l'app.
+    // Stats de base (distance/D+/pente moyenne) inconnues jusqu'ici (seed-cols.mjs
+    // les avait laissées vides) — on en profite pour les renseigner avec les
+    // chiffres officiels du site.
+    colNom: "Col de Jau",
+    versantNom: "Versant unique (Mosset)",
+    profilKm: [2.0, 3.0, 3.8, 6.0, 6.8, 7.2, 6.7, 6.5, 6.0, 5.7, 8.7, 7.1, 6.0, 8.5],
+    distanceKm: 13.6,
+    deniveleM: 806,
+    penteMoyenne: 5.93,
+  },
 ];
 
 async function main() {
@@ -180,7 +212,7 @@ async function main() {
   let nbMisAJour = 0;
   let nbEchecs = 0;
 
-  for (const { colNom, versantNom, profilKm } of PROFILS) {
+  for (const { colNom, versantNom, profilKm, distanceKm, deniveleM, penteMoyenne } of PROFILS) {
     const colId = idParNomCol.get(colNom);
     if (!colId) {
       console.error(`✗ ${colNom} — ${versantNom} : col introuvable, ignoré`);
@@ -188,9 +220,14 @@ async function main() {
       continue;
     }
 
+    const misAJour = { profil_km: profilKm };
+    if (distanceKm != null) misAJour.distance_km = distanceKm;
+    if (deniveleM != null) misAJour.denivele_m = deniveleM;
+    if (penteMoyenne != null) misAJour.pente_moyenne = penteMoyenne;
+
     const { data, error } = await supabase
       .from("versants")
-      .update({ profil_km: profilKm })
+      .update(misAJour)
       .eq("col_id", colId)
       .eq("nom", versantNom)
       .select("id");
