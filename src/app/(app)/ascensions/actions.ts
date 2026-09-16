@@ -90,6 +90,7 @@ export async function ajouterAscension(
   const date = String(formData.get("date_ascension") ?? "");
   const commentaire = String(formData.get("commentaire") ?? "").trim();
   const lienActivite = String(formData.get("lien_activite") ?? "").trim();
+  const dureeRaw = String(formData.get("duree_minutes") ?? "").trim();
 
   if (!versantId || !date) {
     return { error: "Le versant et la date sont obligatoires." };
@@ -111,6 +112,7 @@ export async function ajouterAscension(
     date_ascension: date,
     commentaire: commentaire || null,
     lien_activite: lienActivite || null,
+    duree_minutes: dureeRaw ? Number(dureeRaw) : null,
   });
 
   if (error) {

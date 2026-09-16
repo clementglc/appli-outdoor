@@ -31,5 +31,6 @@ export type Ascension = {
   date_ascension: string;
   commentaire: string | null;
   lien_activite: string | null;
+  duree_minutes: number | null;
   created_at: string;
 };

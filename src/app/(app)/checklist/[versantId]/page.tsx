@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { formatDateLongue, formatDenivele, formatDistance, formatPente } from "@/lib/format";
+import { formatDateLongue, formatDenivele, formatDistance, formatDuree, formatPente } from "@/lib/format";
 import ProfilVersant from "@/components/charts/ProfilVersant";
 import type { Ascension, Col, Versant } from "@/lib/types";
 
@@ -90,9 +90,22 @@ export default async function VersantPage({
           <h2 className="mb-3 text-sm font-semibold text-stone-900">Tes ascensions de ce versant</h2>
           <ul className="space-y-1.5 text-sm text-stone-700">
             {typedAscensions.map((a) => (
-              <li key={a.id}>
-                {formatDateLongue(a.date_ascension)}
-                {a.commentaire ? ` · ${a.commentaire}` : ""}
+              <li key={a.id} className="flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5">
+                <span>
+                  {formatDateLongue(a.date_ascension)}
+                  {a.duree_minutes ? ` · ${formatDuree(a.duree_minutes)}` : ""}
+                  {a.commentaire ? ` · ${a.commentaire}` : ""}
+                </span>
+                {a.lien_activite && (
+                  <a
+                    href={a.lien_activite}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium text-orange-700 hover:text-orange-800"
+                  >
+                    Voir l&apos;activité ↗
+                  </a>
+                )}
               </li>
             ))}
           </ul>

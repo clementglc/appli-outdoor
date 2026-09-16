@@ -3,7 +3,7 @@ import { supprimerAscension } from "./actions";
 import AscensionForm from "@/components/AscensionForm";
 import GererColsVersants from "@/components/GererColsVersants";
 import BoutonConfirmation from "@/components/BoutonConfirmation";
-import { formatDateLongue } from "@/lib/format";
+import { formatDateLongue, formatDuree } from "@/lib/format";
 import type { Ascension, ColAvecVersants } from "@/lib/types";
 
 export default async function AscensionsPage() {
@@ -60,6 +60,7 @@ export default async function AscensionsPage() {
                 </p>
                 <p className="text-sm text-stone-500">
                   {formatDateLongue(ascension.date_ascension)}
+                  {ascension.duree_minutes ? ` · ${formatDuree(ascension.duree_minutes)}` : ""}
                   {ascension.commentaire ? ` · ${ascension.commentaire}` : ""}
                 </p>
               </div>

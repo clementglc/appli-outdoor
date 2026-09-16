@@ -79,16 +79,30 @@ export default function AscensionForm({ cols }: { cols: ColAvecVersants[] }) {
         />
       </div>
 
-      <div>
-        <label className="mb-1 block text-sm font-medium text-stone-700">
-          Commentaire (facultatif)
-        </label>
-        <input
-          type="text"
-          name="commentaire"
-          placeholder="ex : sortie avec le club, canicule..."
-          className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
-        />
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="mb-1 block text-sm font-medium text-stone-700">
+            Commentaire (facultatif)
+          </label>
+          <input
+            type="text"
+            name="commentaire"
+            placeholder="ex : sortie avec le club, canicule..."
+            className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
+          />
+        </div>
+        <div>
+          <label className="mb-1 block text-sm font-medium text-stone-700">
+            Durée en minutes (facultatif)
+          </label>
+          <input
+            type="number"
+            name="duree_minutes"
+            min={1}
+            placeholder="ex : 40"
+            className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
+          />
+        </div>
       </div>
 
       <div>
