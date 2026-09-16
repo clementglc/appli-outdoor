@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { colsAvecStatut, progression } from "@/lib/cols";
 import { formatDateLongue, formatDenivele, formatDistance, formatPente } from "@/lib/format";
@@ -100,28 +101,30 @@ export default async function ChecklistPage() {
                         (v) => v.versantId === versant.id
                       );
                       return (
-                        <li
-                          key={versant.id}
-                          className="flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 text-sm"
-                        >
-                          <span className="flex items-center gap-1.5">
-                            <span
-                              className={`inline-block h-1.5 w-1.5 rounded-full ${
-                                statut?.gravi ? "bg-emerald-500" : "bg-gray-300"
-                              }`}
-                            />
-                            <span className={statut?.gravi ? "text-gray-900" : "text-gray-500"}>
-                              {versant.nom}
+                        <li key={versant.id}>
+                          <Link
+                            href={`/checklist/${versant.id}`}
+                            className="flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 rounded-lg py-1 text-sm hover:bg-gray-50"
+                          >
+                            <span className="flex items-center gap-1.5">
+                              <span
+                                className={`inline-block h-1.5 w-1.5 rounded-full ${
+                                  statut?.gravi ? "bg-emerald-500" : "bg-gray-300"
+                                }`}
+                              />
+                              <span className={statut?.gravi ? "text-gray-900" : "text-gray-500"}>
+                                {versant.nom}
+                              </span>
                             </span>
-                          </span>
-                          <span className="text-xs text-gray-400">
-                            {formatDistance(versant.distance_km)} ·{" "}
-                            {formatDenivele(versant.denivele_m)} ·{" "}
-                            {formatPente(versant.pente_moyenne)}
-                            {statut?.gravi && statut.derniereAscension && (
-                              <> · gravi le {formatDateLongue(statut.derniereAscension.date_ascension)}</>
-                            )}
-                          </span>
+                            <span className="text-xs text-gray-400">
+                              {formatDistance(versant.distance_km)} ·{" "}
+                              {formatDenivele(versant.denivele_m)} ·{" "}
+                              {formatPente(versant.pente_moyenne)}
+                              {statut?.gravi && statut.derniereAscension && (
+                                <> · gravi le {formatDateLongue(statut.derniereAscension.date_ascension)}</>
+                              )}
+                            </span>
+                          </Link>
                         </li>
                       );
                     })}

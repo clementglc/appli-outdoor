@@ -8,6 +8,7 @@ export type Versant = {
   denivele_m: number | null;
   pente_moyenne: number | null;
   pente_max: number | null;
+  profil_km: number[] | null;
   created_at: string;
 };
 
