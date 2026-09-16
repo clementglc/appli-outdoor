@@ -32,7 +32,7 @@ Application personnelle pour Clément (compte : clem.gallice@gmail.com) : recens
 
 **Checklist** (`/checklist`) : vue principale, lecture seule, style "collection" (inspiré de Been). En tête, anneau de progression SVG (`ProgressionRing.tsx`) avec le % de cols gravis + "X/Y cols" + "X/Y versants". En dessous, `ChecklistGrille.tsx` (client) : chips de filtre par département (+ "Tous"), puis grille responsive de `ColCard.tsx` — icône montagne et texte en couleur (orange) pour un col gravi, grisés sinon, badge ✓ vert si gravi ; chaque carte liste ses versants (puce verte/grise, stats distance/dénivelé/pente, date de dernière ascension) avec lien vers la page détail. Cols non gravis triés en premier au sein de chaque filtre.
 
-**Détail d'un versant** (`/checklist/[versantId]`) : stats complètes (distance, D+, pente moyenne/max, altitude départ/sommet), profil altimétrique en escalier (`ProfilVersant.tsx`, SVG maison — hauteur des marches = altitude cumulée réelle, couleur = sévérité de la pente, altitude au-dessus de chaque marche, % à l'intérieur, légende des tranches), formulaire pour renseigner/corriger ce profil (`ProfilVersantForm.tsx` + action `modifierProfilVersant`, pentes séparées par virgules), historique des ascensions personnelles de ce versant.
+**Détail d'un versant** (`/checklist/[versantId]`) : stats complètes (distance, D+, pente moyenne/max, altitude départ/sommet), profil altimétrique en silhouette continue (`ProfilVersant.tsx`, SVG maison — un trapèze par km dont le sommet va de l'altitude cumulée précédente à la suivante, pour un enchaînement sans cassure entre les km ; couleur = sévérité de la pente, altitude au-dessus de chaque point, % à l'intérieur, légende des tranches), historique des ascensions personnelles de ce versant. **Pas de modification du profil depuis l'app** (retiré le 2026-09-16 sur demande explicite) — `cols`/`versants` sont des données de référence partagées entre tous les comptes, pas question qu'un utilisateur quelconque les modifie à sa guise depuis l'UI ; toute correction passe par un script ponctuel ou le SQL Editor (cf. section Audit ci-dessus), jamais par une action serveur exposée dans l'app.
 
 **Mes ascensions** (`/ascensions`) : vue d'écriture.
 - Formulaire "Enregistrer une ascension" (`AscensionForm.tsx`) : sélection Col → Versant (liste dépendante, cascading select côté client), date, commentaire facultatif, upload facultatif d'une trace GPX/FIT (stockée dans le bucket `traces`, jamais public — URL signée générée à la demande, expire après 1h).
@@ -54,7 +54,7 @@ Suite à la découverte d'une inversion Est/Ouest sur Marie-Blanque (stats saisi
 - **PWA** (manifest, service worker, icônes) : pas encore mise en place — à reprendre du pattern Finance WebApp si besoin d'installation sur écran d'accueil.
 - **Intégration Strava** : reportée sciemment (voir "Décisions prises au lancement"). Faisable via OAuth self-service Strava le moment venu.
 - **Intégration Garmin** : abandonnée (validation manuelle Garmin, non adaptée à un projet perso).
-- **Édition d'un col/versant existant** : seul le profil km par km est modifiable a posteriori (page détail). Les autres champs (distance, D+, pente...) ne sont éditables qu'à la création, pas de formulaire de modification pour l'instant.
+- **Édition d'un col/versant existant** : aucune, volontairement — voir la note sur `cols`/`versants` en données de référence partagées ci-dessus (section "Détail d'un versant"). Toute correction passe par un script ponctuel ou le SQL Editor.
 - **Profils km par km manquants ou douteux** : 7 versants sans profil du tout + 2 volontairement exclus (voir `appliquer-profils-km.mjs` ci-dessus) — à corriger manuellement depuis la page détail si besoin, ou à retenter avec une autre approche de recherche.
 - **SMTP personnalisé** : pas encore configuré, cf. section Auth ci-dessus.
 
@@ -63,7 +63,7 @@ Suite à la découverte d'une inversion Est/Ouest sur Marie-Blanque (stats saisi
 - `src/lib/cols.ts` : logique de statut (col/versant gravi ou non) + calcul de progression
 - `src/lib/types.ts`, `src/lib/format.ts`, `src/lib/constants.ts`
 - `src/app/(app)/checklist/{page.tsx,[versantId]/{page.tsx,actions.ts}}`, `src/app/(app)/ascensions/{page.tsx,actions.ts}`
-- `src/components/AscensionForm.tsx`, `GererColsVersants.tsx`, `ProfilVersantForm.tsx`, `BoutonConfirmation.tsx`, `NavPrincipale.tsx`, `ProgressionRing.tsx`, `ChecklistGrille.tsx`, `ColCard.tsx`, `charts/ProfilVersant.tsx`
+- `src/components/AscensionForm.tsx`, `GererColsVersants.tsx`, `BoutonConfirmation.tsx`, `NavPrincipale.tsx`, `ProgressionRing.tsx`, `ChecklistGrille.tsx`, `ColCard.tsx`, `charts/ProfilVersant.tsx`
 - `supabase/schema.sql` : tables + RLS — **à exécuter une fois dans Supabase → SQL Editor**
 - `supabase/storage.sql` : bucket `traces` + policies — **à exécuter une fois, après schema.sql**
 - `supabase/profil-km.sql` : colonne `versants.profil_km` — **à exécuter une fois**

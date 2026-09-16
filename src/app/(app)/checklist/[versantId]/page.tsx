@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { formatDateLongue, formatDenivele, formatDistance, formatPente } from "@/lib/format";
 import ProfilVersant from "@/components/charts/ProfilVersant";
-import ProfilVersantForm from "@/components/ProfilVersantForm";
 import type { Ascension, Col, Versant } from "@/lib/types";
 
 export default async function VersantPage({
@@ -80,13 +79,10 @@ export default async function VersantPage({
             distanceKm={typedVersant.distance_km}
           />
         ) : (
-          <p className="mb-4 text-sm text-stone-500">
+          <p className="text-sm text-stone-500">
             Profil détaillé non renseigné pour l&apos;instant.
           </p>
         )}
-        <div className="mt-4 border-t border-stone-100 pt-4">
-          <ProfilVersantForm versantId={typedVersant.id} profilActuel={typedVersant.profil_km} />
-        </div>
       </div>
 
       {typedAscensions.length > 0 && (

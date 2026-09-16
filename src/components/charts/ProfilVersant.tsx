@@ -52,7 +52,8 @@ export default function ProfilVersant({
 
   const echelleY = (alt: number) =>
     marge.haut + hauteurGraphe - ((alt - yMin) / (yMax - yMin)) * hauteurGraphe;
-  const largeurBarre = largeurGraphe / n;
+  const echelleX = (km: number) => marge.gauche + (km / n) * largeurGraphe;
+  const yBas = echelleY(yMin);
 
   const gridlines: number[] = [];
   for (let v = Math.ceil(yMin / pas) * pas; v <= yMax; v += pas) gridlines.push(v);
@@ -81,62 +82,78 @@ export default function ProfilVersant({
           </g>
         ))}
 
+        {/* Silhouette continue : chaque km est un trapèze dont le sommet
+            va de l'altitude cumulée précédente à la suivante, pour que
+            les km s'enchaînent sans cassure (pas de vision créneau). */}
         {segments.map(({ pente }, i) => {
-          const x = marge.gauche + i * largeurBarre;
-          const yHaut = echelleY(cumul[i + 1]);
-          const yBas = echelleY(yMin);
-          const hauteurBarre = Math.max(yBas - yHaut, 0);
-          const altitudeLabel = Math.round(cumul[i + 1]);
+          const xG = echelleX(i);
+          const xD = echelleX(i + 1);
+          const yG = echelleY(cumul[i]);
+          const yD = echelleY(cumul[i + 1]);
           return (
-            <g key={i}>
-              <rect
-                x={x + 0.5}
-                y={yHaut}
-                width={Math.max(largeurBarre - 1, 1)}
-                height={hauteurBarre}
-                fill={couleurPente(pente)}
-              />
-              {altitudeConnue && (
-                <text
-                  x={x + largeurBarre / 2}
-                  y={yHaut - 4}
-                  fontSize={8.5}
-                  textAnchor="middle"
-                  fill="#78716c"
-                >
-                  {altitudeLabel}
-                </text>
-              )}
-              {hauteurBarre > 13 && (
-                <text
-                  x={x + largeurBarre / 2}
-                  y={yBas - 5}
-                  fontSize={9}
-                  fontWeight={600}
-                  textAnchor="middle"
-                  fill="#ffffff"
-                >
-                  {pente.toFixed(1)}
-                </text>
-              )}
-              <text
-                x={x + largeurBarre / 2}
-                y={hauteur - marge.bas + 13}
-                fontSize={8}
-                textAnchor="middle"
-                fill="#a8a29e"
-              >
-                {i + 1}
-              </text>
-            </g>
+            <polygon
+              key={i}
+              points={`${xG},${yBas} ${xG},${yG} ${xD},${yD} ${xD},${yBas}`}
+              fill={couleurPente(pente)}
+              stroke="#ffffff"
+              strokeWidth={0.5}
+            >
+              <title>{`km ${i + 1} : ${pente.toFixed(1)} %`}</title>
+            </polygon>
           );
         })}
+
+        {segments.map(({ pente }, i) => {
+          const xCentre = (echelleX(i) + echelleX(i + 1)) / 2;
+          const yG = echelleY(cumul[i]);
+          const yD = echelleY(cumul[i + 1]);
+          const hauteurMoyenne = yBas - (yG + yD) / 2;
+          if (hauteurMoyenne <= 13) return null;
+          return (
+            <text
+              key={i}
+              x={xCentre}
+              y={yBas - 5}
+              fontSize={9}
+              fontWeight={600}
+              textAnchor="middle"
+              fill="#ffffff"
+            >
+              {pente.toFixed(1)}
+            </text>
+          );
+        })}
+
+        {cumul.map((alt, i) => (
+          <g key={i}>
+            {altitudeConnue && (
+              <text
+                x={echelleX(i)}
+                y={echelleY(alt) - 4}
+                fontSize={8.5}
+                textAnchor="middle"
+                fill="#78716c"
+              >
+                {Math.round(alt)}
+              </text>
+            )}
+            <text
+              x={echelleX(i)}
+              y={hauteur - marge.bas + 13}
+              fontSize={8}
+              textAnchor="middle"
+              fill="#a8a29e"
+            >
+              {i}
+            </text>
+          </g>
+        ))}
 
         <line
           x1={marge.gauche}
           x2={largeur - marge.droite}
-          y1={echelleY(yMin)}
-          y2={echelleY(yMin)}
+          y1={yBas}
+          y2={yBas}
           stroke="#d6d3d1"
           strokeWidth={1}
         />
