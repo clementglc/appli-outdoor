@@ -55,14 +55,18 @@ Suite à la découverte d'une inversion Est/Ouest sur Marie-Blanque (stats saisi
 - **Intégration Strava** : reportée sciemment (voir "Décisions prises au lancement"). Faisable via OAuth self-service Strava le moment venu.
 - **Intégration Garmin** : abandonnée (validation manuelle Garmin, non adaptée à un projet perso).
 - **Édition d'un col/versant existant** : aucune, volontairement — voir la note sur `cols`/`versants` en données de référence partagées ci-dessus (section "Détail d'un versant"). Toute correction passe par un script ponctuel ou le SQL Editor.
-- **Profils km par km manquants ou douteux** : 7 versants sans profil du tout + 2 volontairement exclus (voir `appliquer-profils-km.mjs` ci-dessus) — à corriger manuellement depuis la page détail si besoin, ou à retenter avec une autre approche de recherche.
+- **Profils km par km manquants ou douteux** : 7 versants sans profil du tout + 2 volontairement exclus (voir `appliquer-profils-km.mjs` ci-dessus) — pas d'édition possible depuis l'app (voir "Détail d'un versant" ci-dessus), à corriger via script ponctuel ou SQL Editor, ou à retenter avec une autre approche de recherche.
 - **SMTP personnalisé** : pas encore configuré, cf. section Auth ci-dessus.
+
+## Pièges connus
+
+- **Toucher `middleware.ts` ou créer/supprimer des routes plusieurs fois pendant qu'un `npm run dev` tourne en continu peut désynchroniser le cache Turbopack**, provoquant des erreurs client type "Failed to fetch" sans rapport avec le code réel (rencontré le 2026-09-16 après plusieurs allers-retours sur une route `/test-chart` temporaire). Si ça arrive et que le code source est propre (pas d'import cassé), redémarrer le serveur de dev (Ctrl+C puis `npm.cmd run dev -- -p 3010`) résout le problème — même famille de piège que "ne jamais lancer `npm run build` pendant `npm run dev`" sur Finance WebApp.
 
 ## Fichiers clés
 
 - `src/lib/cols.ts` : logique de statut (col/versant gravi ou non) + calcul de progression
 - `src/lib/types.ts`, `src/lib/format.ts`, `src/lib/constants.ts`
-- `src/app/(app)/checklist/{page.tsx,[versantId]/{page.tsx,actions.ts}}`, `src/app/(app)/ascensions/{page.tsx,actions.ts}`
+- `src/app/(app)/checklist/{page.tsx,[versantId]/page.tsx}`, `src/app/(app)/ascensions/{page.tsx,actions.ts}`
 - `src/components/AscensionForm.tsx`, `GererColsVersants.tsx`, `BoutonConfirmation.tsx`, `NavPrincipale.tsx`, `ProgressionRing.tsx`, `ChecklistGrille.tsx`, `ColCard.tsx`, `charts/ProfilVersant.tsx`
 - `supabase/schema.sql` : tables + RLS — **à exécuter une fois dans Supabase → SQL Editor**
 - `supabase/storage.sql` : bucket `traces` + policies — **à exécuter une fois, après schema.sql**
