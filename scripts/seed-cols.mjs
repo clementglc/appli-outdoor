@@ -118,8 +118,11 @@ const COLS = [
     altitude_m: 1035,
     departement: "Pyrénées-Atlantiques",
     versants: [
-      { nom: "Versant Est (Bielle)", ville_depart: "Bielle", distance_km: 9.5, denivele_m: 767, pente_moyenne: 7.7, pente_max: 13, altitude_depart_m: 268 },
-      { nom: "Versant Ouest (Escot / Bares)", ville_depart: "Escot", distance_km: 12.4, denivele_m: 800, pente_moyenne: 6.4, pente_max: null, altitude_depart_m: 235 },
+      // Stats vérifiées sur cyclingcols.com le 2026-09-16 (les valeurs
+      // précédentes avaient les deux versants inversés : le 7.7% bien connu
+      // du Tour de France appartient au côté Escot, pas Bielle).
+      { nom: "Versant Est (Bielle)", ville_depart: "Bielle", distance_km: 11.3, denivele_m: 597, pente_moyenne: 5.2, pente_max: 11, altitude_depart_m: 438 },
+      { nom: "Versant Ouest (Escot / Bares)", ville_depart: "Escot", distance_km: 9.2, denivele_m: 707, pente_moyenne: 7.7, pente_max: 13, altitude_depart_m: 328 },
     ],
   },
   {
