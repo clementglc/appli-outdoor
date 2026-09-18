@@ -17,6 +17,9 @@ export type Col = {
   nom: string;
   altitude_m: number | null;
   departement: string | null;
+  anecdote: string | null;
+  latitude: number | null;
+  longitude: number | null;
   created_at: string;
 };
 

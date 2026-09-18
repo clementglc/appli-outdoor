@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { formatDateLongue, formatDenivele, formatDistance, formatPente } from "@/lib/format";
-import type { ColAvecStatut } from "@/lib/cols";
+import { SEUIL_BADGE_HABITUE, type ColAvecStatut } from "@/lib/cols";
 
 /** Carte "collection" façon Been : icône et texte en couleur pour un col
  * déjà gravi, grisés/atténués sinon — pour donner cet effet de collection
@@ -21,11 +21,24 @@ export default function ColCard({ col }: { col: ColAvecStatut }) {
             />
           </svg>
         </span>
-        {col.gravi && (
-          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-[10px] text-white">
-            ✓
-          </span>
-        )}
+        <div className="flex items-center gap-1">
+          {col.nbAscensions >= SEUIL_BADGE_HABITUE && (
+            <span
+              className="flex items-center gap-0.5 rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-800"
+              title={`Gravi ${col.nbAscensions} fois — badge habitué`}
+            >
+              <svg width={10} height={10} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2l2.9 6.3 6.9.9-5 4.9 1.2 6.9L12 17.6l-6 3.4 1.2-6.9-5-4.9 6.9-.9L12 2z" />
+              </svg>
+              {col.nbAscensions}
+            </span>
+          )}
+          {col.gravi && (
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-[10px] text-white">
+              ✓
+            </span>
+          )}
+        </div>
       </div>
 
       <p className={`font-medium ${col.gravi ? "text-stone-900" : "text-stone-500"}`}>{col.nom}</p>

@@ -52,6 +52,9 @@ export default async function VersantPage({
       <div>
         <h1 className="text-xl font-semibold text-stone-900">{typedCol?.nom ?? "Col"}</h1>
         <p className="text-orange-700">{typedVersant.nom}</p>
+        {typedCol?.anecdote && (
+          <p className="mt-1 text-sm text-stone-500">{typedCol.anecdote}</p>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
